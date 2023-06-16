@@ -1,6 +1,7 @@
 import { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import QuizSample from "./quizjs";
+<<<<<<< Updated upstream
 // import Index from "../layout";
 
 export default function Componentquiz() {
@@ -45,6 +46,65 @@ export default function Componentquiz() {
     const thisInput =
       Array.isArray(inputValues) &&
       inputValues.find((obj) => obj["id"] === questionId);
+=======
+import Index from "../layout";
+
+export default function Componentquiz() {
+  const [quizData, setQuizData] = useState(QuizSample);
+  const [data, setData] = useState({});
+  const [activeChoice, setActiveChoice] = useState({});
+  const [timeOut, setTimeOut] = useState(30 * 60);
+  const [inputValues, setInputValues] = useState([]);
+  // const [score, setScore] = useState(null);
+
+  // getData
+  // useEffect(() => {
+  //   Axios
+  //     .get
+  //     // localhost:hostของเครื่อง/api/path
+  //     ()
+  //     .then((res) =>
+  //       //res data ที่ส่งมาข้างหลัง
+  //       //  ใช้เอาไป setQuizData Ex. setQuizData(res.data)
+  //       console.log(res)
+  //     )
+  //     .catch((err) =>
+  //       // catch err จากหลังบ้าน Ex.Err ต่างๆจากหลังบ้าน
+  //       console.log(err)
+  //     );
+  // }, []);
+
+  useEffect(() => {
+    const intervalTime = setInterval(() => {
+      setTimeOut((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalTime);
+    };
+  }, []);
+
+  const min = Math.floor(timeOut / 60);
+  const seconds = timeOut % 60;
+
+  useEffect(() => {
+    // console.table(inputValues);
+  }, [inputValues]);
+  useEffect(() => {
+    // console.log(data);
+    // console.log(activeChoice);
+  }, [data]);
+
+  const handleChoiceSelect = (questionId, choiceIndex) => {
+    setActiveChoice((prev) => ({
+      ...prev,
+      [questionId]: choiceIndex,
+    }));
+
+    const thisInput =
+      Array.isArray(inputValues) &&
+      inputValues.find((obj) => obj["question_id"] === questionId);
+>>>>>>> Stashed changes
 
     const updatedInputValues = thisInput
       ? inputValues.map((obj) =>
@@ -57,6 +117,7 @@ export default function Componentquiz() {
   const handleSubmit = () => {
     const newData = inputValues.map((inputValue) => {
       if (inputValue.hasOwnProperty("select")) {
+<<<<<<< Updated upstream
         const selectValues = inputValue.select; // Retrieve the values of the 'select' property
         delete inputValue.select; // Remove the 'select' property
         inputValue["ans"] = [selectValues]; // Assign the values to the 'ans' property
@@ -64,41 +125,80 @@ export default function Componentquiz() {
         const reducedObj = Object.keys(inputValue).reduce(
           (acc, key) => {
             if (key !== "id") {
+=======
+        // Retrieve the values of the 'select' property
+        inputValue["question_id"] = inputValue?.id; // Assign the values to the 'ans' property
+        inputValue["ans"] = [inputValue.select]; // Assign the values to the 'ans' property
+        delete inputValue.id; // Remove the 'select' property
+        delete inputValue.select; // Remove the 'select' property
+      } else {
+        const reducedObj = Object.keys(inputValue).reduce(
+          (acc, key) => {
+            if (key !== "question_id") {
+>>>>>>> Stashed changes
               acc.ans.push(inputValue[key]);
             }
             return acc;
           },
+<<<<<<< Updated upstream
           { id: inputValue.id, ans: [] }
+=======
+          { question_id: inputValue.question_id, ans: [] }
+>>>>>>> Stashed changes
         );
         inputValue = reducedObj;
       }
       return inputValue;
     });
 
+<<<<<<< Updated upstream
     setData(newData);
+=======
+    const result = {
+      username: data.username,
+      email: data.email,
+      questions: newData,
+    };
+
+    setData(result);
+    // console.log(data);
+>>>>>>> Stashed changes
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+<<<<<<< Updated upstream
     // setData((prev) => ({ ...prev, [name]: value }));
+=======
+    setData((prev) => ({ ...prev, [name]: value }));
+>>>>>>> Stashed changes
   };
 
   const handleInput = (questionId, e) => {
     const { name, value } = e.target;
     const thisInput =
       Array.isArray(inputValues) &&
+<<<<<<< Updated upstream
       inputValues.find((obj) => obj["id"] === questionId);
+=======
+      inputValues.find((obj) => obj["question_id"] === questionId);
+>>>>>>> Stashed changes
 
     const updatedInputValues = thisInput
       ? inputValues.map((obj) =>
           obj === thisInput ? { ...obj, [name]: value } : obj
         )
+<<<<<<< Updated upstream
       : [...inputValues, { id: questionId, [name]: value }];
+=======
+      : [...inputValues, { question_id: questionId, [name]: value }];
+>>>>>>> Stashed changes
     setInputValues(updatedInputValues);
   };
 
   return (
     <div className="flex flex-col gap-[24px] items-center">
+<<<<<<< Updated upstream
       {/* <Index min={min} seconds={seconds}> */}
       <input
         type="text"
@@ -657,3 +757,142 @@ export default function Componentquiz() {
 //     </div>
 //   );
 // }
+=======
+      <Index min={min} seconds={seconds}>
+        <input
+          type="text"
+          className="username"
+          name="username"
+          value={data.username}
+          onChange={(e) => handleChange(e)}
+        />
+        <input
+          type="email"
+          className="email"
+          name="email"
+          value={data.email}
+          onChange={(e) => handleChange(e)}
+        />
+        {quizData.map((item, ind) => {
+          const question_quiz = item.sub_question;
+
+          const inputObj = {
+            "%i%": (
+              <input
+                type="text"
+                name="input"
+                value={
+                  Array.isArray(inputValues) &&
+                  inputValues.find(
+                    (obj) => obj["question_id"] === item.question_id
+                  )?.input
+                    ? inputValues.find(
+                        (obj) => obj["question_id"] === item.question_id
+                      ).input
+                    : ""
+                }
+                onChange={(e) => handleInput(item.question_id, e)}
+              />
+            ),
+            "%i1%": (
+              <input
+                type="text"
+                name="input1"
+                value={
+                  Array.isArray(inputValues) &&
+                  inputValues.find(
+                    (obj) => obj["question_id"] === item.question_id
+                  )?.input1
+                    ? inputValues.find(
+                        (obj) => obj["question_id"] === item.question_id
+                      ).input1
+                    : ""
+                }
+                onChange={(e) => handleInput(item.question_id, e)}
+              />
+            ),
+            "%i2%": (
+              <input
+                style={{ margin: "0px 16px 0px" }}
+                type="text"
+                name="input2"
+                value={
+                  Array.isArray(inputValues) &&
+                  inputValues.find(
+                    (obj) => obj["question_id"] === item.question_id
+                  )?.input2
+                    ? inputValues.find(
+                        (obj) => obj["question_id"] === item.question_id
+                      ).input2
+                    : ""
+                }
+                onChange={(e) => handleInput(item.question_id, e)}
+              />
+            ),
+            function: (
+              <span className=" text-purple-400 text-xl">function </span>
+            ),
+            return: <span className="text-purple-400 text-xl">return </span>,
+            const: <span className="text-purple-500 text-xl">const </span>,
+          };
+          const swap_text = () => {
+            const text_array = question_quiz.split(" ");
+            const a = text_array.map((item) => {
+              if (item in inputObj) item = inputObj[item];
+              else item += " ";
+              return item;
+            });
+            return a;
+          };
+
+          return (
+            <div className="flex mb-[24px] w-[50%] " key={item.question_id}>
+              <div className="flex flex-col gap-[20px] w-full  ">
+                <div>
+                  {ind + 1}. {item.question}
+                </div>
+
+                {item.type_question === "key" ? (
+                  <pre>
+                    <code>{swap_text()}</code>
+                  </pre>
+                ) : (
+                  <div className="flex gap-[16px] w-[100%] ">
+                    {item.choices?.map((choiz, indexchoice) => {
+                      return (
+                        <div
+                          key={choiz.id}
+                          className={`flex w-[25%] ${
+                            activeChoice[item.question_id] === choiz
+                              ? "bg-[#bbadad67] text-black "
+                              : "bg-blue-900 text-white"
+                          }
+                            p-[24px]  break-all
+                            justify-center rounded-[16px] box-border text-2 `}
+                          onClick={() => {
+                            handleChoiceSelect(item.question_id, choiz);
+                          }}
+                        >
+                          {choiz}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+        <footer className="bttton-submit-container flex justify-center w-[50%] bg-cyan-300">
+          <button
+            className="button-submit p-4 text-white bg-[#213555] m-10 rounded-xl"
+            onClick={handleSubmit}
+          >
+            ส่งคำตอบ
+          </button>
+        </footer>
+      </Index>
+    </div>
+  );
+}
+>>>>>>> Stashed changes
