@@ -7,59 +7,27 @@ export default function Componentquiz() {
   const [quizData, setQuizData] = useState(QuizSample);
   // const [timeOut, setTimeOut] = useState(30 * 60);
   // const [score, setScore] = useState(null);
-  const [data, setData] = useState({
-    username: "",
-    email: "",
-    ans: [
-      {
-        id: "",
-        ans: [],
-      },
-    ],
-  });
 
-  const [inputValues, setInputValues] = useState(
-    quizData.map((item) => ({
-      id: item.id,
-      input: null || "",
-      input1: null || "",
-      input2: null || "",
-    }))
-  );
+  const [data, setData] = useState({});
 
-  // getData
-  // useEffect(() => {
-  //   Axios
-  //     .get
-  //     // localhost:hostของเครื่อง/api/path
-  //     ()
-  //     .then((res) =>
-  //       //res data ที่ส่งมาข้างหลัง
-  //       //  ใช้เอาไป setQuizData Ex. setQuizData(res.data)
-  //       console.log(res)
-  //     )
-  //     .catch((err) =>
-  //       // catch err จากหลังบ้าน Ex.Err ต่างๆจากหลังบ้าน
-  //       console.log(err)
-  //     );
-  // }, []);
+  // {
+  //   username: "",
+  //   email: "",
+  //   ans: [
+  //     {
+  //       id: "",
+  //       ans: [],
+  //     },
+  //   ],
+  // }
 
-  // useEffect(() => {
-  //   const intervalTime = setInterval(() => {
-  //     setTimeOut((prevTime) => prevTime - 1);
-  //   }, 1000);
-
-  //   return () => {
-  //     clearInterval(intervalTime);
-  //   };
-  // }, []);
-
-  // const min = Math.floor(timeOut / 60);
-  // const seconds = timeOut % 60;
-
-  // useEffect(() => {
-  //   score !== null && console.log(score);
-  // }, [score]);
+  const [inputValues, setInputValues] = useState([]);
+  useEffect(() => {
+    console.table(inputValues);
+  }, [inputValues]);
+  useEffect(() => {
+    console.table(data);
+  }, [data]);
 
   const handleChoiceSelect = (questionId, choiceIndex) => {
     setQuizData((prevQuestions) => {
@@ -73,133 +41,60 @@ export default function Componentquiz() {
         return question;
       });
     });
-    // setData((prevData) => {
-    //   const updatedAns = prevData.ans.map((item) => {
-    //     if (item.id === questionId) {
-    //       return {
-    //         id: item.id,
-    //         ans: [choiceIndex, "", ""],
-    //       };
-    //     }
-    //     return item;
-    //   });
 
-    //   return {
-    //     ...prevData,
-    //     ans: updatedAns,
-    //   };
-    // });
+    const thisInput =
+      Array.isArray(inputValues) &&
+      inputValues.find((obj) => obj["id"] === questionId);
+
+    const updatedInputValues = thisInput
+      ? inputValues.map((obj) =>
+          obj === thisInput ? { ...obj, select: choiceIndex } : obj
+        )
+      : [...inputValues, { id: questionId, select: choiceIndex }];
+    setInputValues(updatedInputValues);
   };
 
   const handleSubmit = () => {
-    let newscore = 0;
-    quizData.forEach((prev) => {
-      if (
-        prev.activeChoice === prev.correctchoice &&
-        prev.type_Quiz === "select"
-      ) {
-        newscore++;
+    const newData = inputValues.map((inputValue) => {
+      if (inputValue.hasOwnProperty("select")) {
+        const selectValues = inputValue.select; // Retrieve the values of the 'select' property
+        delete inputValue.select; // Remove the 'select' property
+        inputValue["ans"] = [selectValues]; // Assign the values to the 'ans' property
+      } else {
+        const reducedObj = Object.keys(inputValue).reduce(
+          (acc, key) => {
+            if (key !== "id") {
+              acc.ans.push(inputValue[key]);
+            }
+            return acc;
+          },
+          { id: inputValue.id, ans: [] }
+        );
+        inputValue = reducedObj;
       }
+      return inputValue;
     });
-    console.log(data);
-    // setData((prevData) => {
-    //   const updatedAns = inputValues.map((item) => ({
-    //     id: item.id,
-    //     ans: item.ans,
-    //   }));
 
-    //   return {
-    //     ...prevData,
-    //     ans: updatedAns,
-    //   };
-    // });
-
-    // setInputValues((prevInputValues) => {
-    //   const updatedInputValues = prevInputValues.map((item) => ({
-    //     ...item,
-    //     ans: [item.input, item.input1, item.input2],
-    //   }));
-    //   return updatedInputValues;
-    // });
-
-    // quizData.forEach((prev) =>
-    //   inputValues.forEach((inputV) =>
-    //     prev.id === inputV.id &&
-    //     prev.correctInput === inputV.input &&
-    //     prev.correctInput1 === inputV.input1 &&
-    //     prev.correctInput2 === inputV.input2
-    //       ? newscore++
-    //       : inputV.id
-    //   )
-    // );
-    // setScore(newscore);
-    // console.log(inputValues.map((item) => item.ans));
+    setData(newData);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
+    // setData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleInput = (questionId, e) => {
     const { name, value } = e.target;
+    const thisInput =
+      Array.isArray(inputValues) &&
+      inputValues.find((obj) => obj["id"] === questionId);
 
-    setInputValues((prev) =>
-      prev.map((previnput) =>
-        previnput.id === questionId
-          ? { ...previnput, [name]: value }
-          : previnput
-      )
-    );
-    // setData((prevData) => {
-    //   const checkIdData = prevData.ans.map((item) => item.id);
-    //   const updatedAns = inputValues.map((item) => {
-    //     if (checkIdData === item.id) {
-    //       return {
-    //         id: item.id,
-    //         ans: [item.input, item.input1, item.input2],
-    //       };
-    //     }
-    //     console.log(item);
-    //     return item;
-    //   });
-
-    //   return {
-    //     ...prevData,
-    //     ans: updatedAns.map((item) => {
-    //       return item.input && item.input1 && item.input2;
-    //     }),
-    //   };
-    // });
-    // console.log(questionId);
-    // setData((prevData) => {
-    //   // const dataAns = prevData.ans.find((item) => item.id === questionId);
-    //   // const dataQuiz = quizData.map(
-    //   //   (item) => item.type_Quiz === "key" && item.id
-    //   // );
-    //   // console.log(dataQuiz.id);
-    //   const updatedAns = inputValues.map((item) => {
-    //     if (item.id === questionId) {
-    //       return {
-    //         id: item.id,
-    //         ans: [item.input, item.input1, item.input2],
-    //       };
-    //     }
-    //     return item;
-    //   });
-    //   // dataAns &&
-    //   // dataAns.id === item.id &&
-    //   // item.id === dataQuiz &&
-    //   // dataAns.id === dataQuiz
-    //   // ?
-    //   // : ""
-    //   console.log("sas", updatedAns);
-
-    //   return {
-    //     ...prevData,
-    //     ans: updatedAns,
-    //   };
-    // });
+    const updatedInputValues = thisInput
+      ? inputValues.map((obj) =>
+          obj === thisInput ? { ...obj, [name]: value } : obj
+        )
+      : [...inputValues, { id: questionId, [name]: value }];
+    setInputValues(updatedInputValues);
   };
 
   return (
@@ -227,7 +122,12 @@ export default function Componentquiz() {
             <input
               type="text"
               name="input"
-              value={inputValues[ind].input}
+              value={
+                Array.isArray(inputValues) &&
+                inputValues.find((obj) => obj["id"] === item.id)?.input
+                  ? inputValues.find((obj) => obj["id"] === item.id).input
+                  : "null"
+              }
               onChange={(e) => handleInput(item.id, e)}
             />
           ),
@@ -235,7 +135,12 @@ export default function Componentquiz() {
             <input
               type="text"
               name="input1"
-              value={inputValues[ind].input1}
+              value={
+                Array.isArray(inputValues) &&
+                inputValues.find((obj) => obj["id"] === item.id)?.input1
+                  ? inputValues.find((obj) => obj["id"] === item.id).input1
+                  : "null"
+              }
               onChange={(e) => handleInput(item.id, e)}
             />
           ),
@@ -244,7 +149,12 @@ export default function Componentquiz() {
               style={{ margin: "0px 16px 0px" }}
               type="text"
               name="input2"
-              value={inputValues[ind].input2}
+              value={
+                Array.isArray(inputValues) &&
+                inputValues.find((obj) => obj["id"] === item.id)?.input2
+                  ? inputValues.find((obj) => obj["id"] === item.id).input2
+                  : "null"
+              }
               onChange={(e) => handleInput(item.id, e)}
             />
           ),
