@@ -43,7 +43,8 @@ export default function Componentquiz() {
 
   useEffect(() => {
     // console.table(inputValues);
-  }, [inputValues]);
+    console.log(data);
+  }, [data, inputValues]);
   useEffect(() => {
     // console.log(data);
     // console.log(activeChoice);

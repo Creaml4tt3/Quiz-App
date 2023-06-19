@@ -10,7 +10,7 @@ const QuizSample = [
     question_id: 2,
     question: "สำหรับการประกาศตัวแปรใน JavaScript คำสั่งใดที่ถูกต้อง?",
     type_question: "select",
-    choice: [
+    choices: [
       "var x = 5;",
       "let x = 5;",
       "const x = 5;",
@@ -39,7 +39,7 @@ const QuizSample = [
       </>
     ),
     type_question: "select",
-    choice: ["15", "510", '"510"', "Error"],
+    choices: ["15", "510", '"510"', "Error"],
   },
   {
     question_id: 5,
@@ -60,7 +60,7 @@ const QuizSample = [
     question:
       "ใน JavaScript, คำสั่งใดที่ใช้ในการกำหนดเงื่อนไขเพื่อทำงานแบบเลือก (conditional)?",
     type_question: "select",
-    choice: ["for", "while", "if", "switch"],
+    choices: ["for", "while", "if", "switch"],
   },
   {
     question_id: 7,
@@ -82,7 +82,7 @@ const QuizSample = [
     question:
       "คำสั่งใดที่ใช้ในการเขียนข้อความลงในคอนโซล (console) ใน JavaScript?",
     type_question: "select",
-    choice: ["print()", "log()", "write()", "display()", "log"],
+    choices: ["print()", "log()", "write()", "display()", "log"],
   },
   {
     question_id: 9,
@@ -104,14 +104,14 @@ const QuizSample = [
     question:
       "ใน JavaScript, การใช้งานโครงสร้างข้อมูลแบบ Array สามารถทำได้โดยใช้คำสั่งใด?",
     type_question: "select",
-    choice: ["newSet()", "newMap()", "newArray()", "new Array()"],
+    choices: ["newSet()", "newMap()", "newArray()", "new Array()"],
   },
   {
     question_id: 11,
     question:
       "สำหรับฟังก์ชันใน JavaScript, คำสั่งใดที่ใช้ในการส่งค่ากลับ (return value) จากฟังก์ชัน?",
     type_question: "select",
-    choice: ["yield", "send", "return", "callback"],
+    choices: ["yield", "send", "return", "callback"],
   },
   {
     question_id: 12,
