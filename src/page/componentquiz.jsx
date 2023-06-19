@@ -77,7 +77,7 @@ export default function Componentquiz() {
       });
     }
     // console.log(data);
-  }, [data, inputValues, min, seconds]);
+  }, [data, inputValues, min, seconds, navigate]);
   useEffect(() => {
     // console.log(data);
     // console.log(activeChoice);
