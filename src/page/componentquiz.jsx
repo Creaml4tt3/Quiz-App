@@ -79,8 +79,13 @@ export default function Componentquiz() {
       } else {
         const reducedObj = Object.keys(inputValue).reduce(
           (acc, key) => {
+            console.log(acc);
             if (key !== "question_id") {
-              acc.ans.push(inputValue[key]);
+              acc.ans.push(
+                inputValue["input"] || null,
+                inputValue["input1"] || null,
+                inputValue["input2"] || null
+              );
             }
             return acc;
           },
@@ -247,7 +252,7 @@ export default function Componentquiz() {
             </div>
           );
         })}
-        <footer className="bttton-submit-container flex justify-center w-[50%] bg-cyan-300">
+        <footer className="bttton-submit-container flex justify-center w-[50%] ">
           <button
             className="button-submit p-4 text-white bg-[#213555] m-10 rounded-xl"
             onClick={handleSubmit}
