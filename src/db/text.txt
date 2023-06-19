@@ -1,0 +1,84 @@
+db จะมี 3 table
+
+
+***************
+table user    *
+***************
+user_id : int PK                        Ex. 1
+email : varchar                         Ex. name_surname@gmail.com
+score : int                             Ex. 2
+name : varchar                          Ex. name
+sur_name : varchar                      Ex. sur_name
+
+***************
+table quiz    *
+***************
+quiz_id : int PK
+title  : varchar                            EX.สำหรับการประกาศตัวแปรใน JavaScript คำสั่งใดที่ถูกต้อง?
+key_edit : varchar                          *** อันนี้เป็นโจทย์ข้อเขียน   Ex.<div className="flex flex-col">function getArea( width , height ){
+                                            <div className="flex p-[20px] text-red-400">return Number(____) * Number(_____) ;</div> 
+                                            }                                       
+                                            </div>
+type_quiz : key || select (varchar)
+
+
+
+*****************
+table question  *
+*****************
+question_id : int PK
+answer_1      : string                      Ex. bra bra bra1
+answer_2      : string                      Ex. bra bra bra2
+answer_3      : string                      Ex. bra bra bra3
+select        : int                         Ex. index[0]
+quiz_id       : int             FK          Ex. 1
+user_id       : int             FK          Ex. 1
+
+
+
+
+user เวลา submit
+จะได้ JSON ไปสองก้อน
+
+ก้อนที่ 1
+ {
+    id: 1,
+    title: "ฟังก์ชั่นคำนวณหาพื้นที่ (กว้าง * สูง ) จงเติมคำในช่องว่าง",
+    type_Quiz: "key",
+    keyEdit: `
+    <div className="flex flex-col">function getArea( width , height ){
+      <div className="flex p-[20px] text-red-400">return Number(%i%) * Number(%i1%) ;</div> 
+    }</div>
+    `,
+    correctInput: "width" || "height",
+    correctInput1: "width" || "height",
+    correctInput2: null,
+
+  },
+  {
+    id: 2,
+    title: "สำหรับการประกาศตัวแปรใน JavaScript คำสั่งใดที่ถูกต้อง?",
+    type_Quiz: "select",
+    keyEdit: "",
+    QuizChoice: [
+      "var x = 5;",
+      "let x = 5;",
+      "const x = 5;",
+      "all of the above(ทั้งหมดข้างต้น)",
+    ],
+    correctchoice: 3,
+    activeChoice: null,
+  },
+
+
+
+อีกก้อนจะเป็น 
+
+
+{
+    id :  ***อันนี้จะเป็น id quiz_id
+    answer_1 : "",
+    answer_2 : "",
+    answer_3 : "",
+    
+}
