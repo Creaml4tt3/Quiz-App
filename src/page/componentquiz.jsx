@@ -1,10 +1,11 @@
-import { Axios } from "axios";
+import axios, { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import QuizSample from "./quizjs";
 import Index from "../layout";
+import Swal from "sweetalert2";
 
 export default function Componentquiz() {
-  const [quizData, setQuizData] = useState(QuizSample);
+  const [quizData, setQuizData] = useState([]);
   const [data, setData] = useState({});
   const [activeChoice, setActiveChoice] = useState({});
   const [timeOut, setTimeOut] = useState(30 * 60);
@@ -43,7 +44,31 @@ export default function Componentquiz() {
 
   useEffect(() => {
     // console.table(inputValues);
-    console.log(data);
+
+    if (min === 5 && seconds === 0) {
+      Swal.fire({
+        title: "จะหมดเวลาละรีบทำ",
+        icon: "warning",
+        confirmButtonText: "เออรู้ละ",
+      });
+    }
+    if (min === 0 && seconds === 0) {
+      axios
+        .post("", data)
+        .then((res) => {
+          Swal.fire({
+            title: "หมดเวลา",
+            text: "ยืนยันส่งด้วย",
+            icon: "warning",
+            confirmButtonText: "เออรู้ละ",
+          }).then((result) => {});
+          //
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    // console.log(data);
   }, [data, inputValues]);
   useEffect(() => {
     // console.log(data);
