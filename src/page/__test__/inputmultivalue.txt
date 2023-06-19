@@ -1,0 +1,103 @@
+mport React, { useState } from 'react';
+
+function Quiz() {
+  const questions = [
+    { question: 'Question 1', id: 1, correctInput1: 'Correct 1', correctInput2: 'Correct 2' },
+    { question: 'Question 2', id: 2, correctInput1: 'Answer 1', correctInput2: 'Answer 2' },
+  ];
+
+  const [inputs, setInputs] = useState(
+    questions.map((question) => ({
+      id: question.id,
+      input1: '',
+      input2: '',
+      isAnswerCorrect: false,
+    }))
+  );
+
+  const handleInputChange = (e, questionId) => {
+    const { name, value } = e.target;
+    setInputs((prevInputs) =>
+      prevInputs.map((input) =>
+        input.id === questionId ? { ...input, [name]: value } : input
+      )
+    );
+  };
+
+  const checkAnswer = (questionId) => {
+    const question = questions.find((q) => q.id === questionId);
+    const input = inputs.find((input) => input.id === questionId);
+
+    if (
+      input.input1 === question.correctInput1 &&
+      input.input2 === question.correctInput2
+    ) {
+      setInputs((prevInputs) =>
+        prevInputs.map((input) =>
+          input.id === questionId ? { ...input, isAnswerCorrect: true } : input
+        )
+      );
+    } else {
+      setInputs((prevInputs) =>
+        prevInputs.map((input) =>
+          input.id === questionId ? { ...input, isAnswerCorrect: false } : input
+        )
+      );
+    }
+  };
+
+  return (
+    <div>
+      {questions.map((question) => {
+        const input = inputs.find((input) => input.id === question.id);
+
+        return (
+          <div key={question.id} className='flex flex-col gap-4'>
+            <h2>{question.question}</h2>
+            <input
+              className='bg-black text-white'
+              type="text"
+              name="input1"
+              value={input.input1}
+              onChange={(e) => handleInputChange(e, question.id)}
+            />
+            <input
+            className='bg-black text-white'
+              type="text"
+              name="input2"
+              value={input.input2}
+              onChange={(e) => handleInputChange(e, question.id)}
+            />
+            <button onClick={() => checkAnswer(question.id)}>Check Answer</button>
+            {input.isAnswerCorrect && <p>Correct!</p>}
+            {!input.isAnswerCorrect && (
+              <p>Incorrect. Please try again.</p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+
+export default Quiz;
+
+
+// สงสัยเฉยๆ
+
+
+มีเช็คคำตอบหลังบ้านไหม
+
+table choice  มีเช็คคำตอบไหม
+ขอเพิ่ม  
+ans1
+ans2
+ที่ table ans
+table solve เป็น เช็คคำตอบใช่ไหม
+
+
+type
+ น่าจะมี 2 type
+ แบบเลือกตอบ กับ พิมพ์เอาเอง
+
