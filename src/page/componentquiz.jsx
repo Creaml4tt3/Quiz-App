@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-// import QuizSample from "./quizjs";
+import QuizSample from "./quizjs";
 import Index from "../layout";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
@@ -8,26 +8,27 @@ import { useNavigate } from "react-router";
 export default function Componentquiz() {
   const navigate = useNavigate();
 
-  const [quizData, setQuizData] = useState([]);
+  const [quizData, setQuizData] = useState(QuizSample);
   const [data, setData] = useState({});
   const [activeChoice, setActiveChoice] = useState({});
-  const [timeOut, setTimeOut] = useState(1 * 60);
+  const [timeOut, setTimeOut] = useState(30 * 60);
   const [inputValues, setInputValues] = useState([]);
   // const [score, setScore] = useState(null);
 
   // getData
   useEffect(() => {
     axios
-      .get(`127.0.0.1:8000/api/questions`)
+      .get("http://localhost:8000/api/questions")
       .then((res) =>
         //res data ที่ส่งมาข้างหลัง
         //  ใช้เอาไป setQuizData Ex.
         // setQuizData(res.data)
-        console.log(res)
+        console.log("check --> ", res.data)
       )
-      .catch((err) =>
+      .catch(
+        (err) => console.log("check --> error", err)
         // catch err จากหลังบ้าน Ex.Err ต่างๆจากหลังบ้าน
-        console.log(err)
+        // console.log(err)
       );
   }, []);
 
