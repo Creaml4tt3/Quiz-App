@@ -19,28 +19,40 @@ class QuestionController extends Controller
     public function index()
     {
 
-        $questions = Question::leftJoin('choices', 'questions.id', '=', 'choices.question_id')
-        ->select('questions.*', 'choices.id', 'choices.choice')
-        ->get()
-        ->groupBy('question_id')
-        ->map(function ($items) {
-            $question = $items->first();
-            $choices = $items->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'choice' => $item->choice,
-                ];
-            });
-    
-            return [
-                'question_id' => $question->question_id,
-                'question' => $question->question,
-                'sub_question' => $question->sub_question,
-                'choices' => $choices,
-            ];
-        })
-        ->values();
 
+        $questions = Question::leftJoin('choices', 'questions.questions_id', '=', 'choices.question_id')
+            ->select('questions.*', 'choices.id', 'choices.choice', 'questions.type_language')
+            ->get()
+            ->groupBy('type_language')
+            ->map(function ($items, $typeLanguage) {
+                $groupedQuestions = $items->groupBy('questions_id')
+                    ->map(function ($questionItems) {
+                        $gg = $questionItems->map(function ($item) {
+                            if (!is_null($item->id) && !is_null($item->choice)) {
+                                return [
+                                    'id' => $item->id,
+                                    'choice' => $item->choice,
+                                ];
+                            } else {
+                                return null;
+                            }
+                        })->filter(); // Remove null values
+
+                        return [
+                            'question_id' => $questionItems->first()->questions_id,
+                            'type' => $questionItems->first()->type,
+                            'question' => $questionItems->first()->question,
+                            'sub_question' => $questionItems->first()->sub_question,
+                            'choices' => $gg->isEmpty() ? null : $gg->values()->toArray(),
+                        ];
+                    });
+
+                return [
+                    'type_language' => $typeLanguage,
+                    'questions' => $groupedQuestions,
+                ];
+            })
+            ->values();
 
         return response()->json($questions);
 

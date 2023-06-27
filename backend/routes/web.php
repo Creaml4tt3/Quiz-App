@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 
@@ -18,4 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/index', [QuestionController::class, 'index'])->name('aa');
+//Route::get('/test/{id}', [AnsController::class, 'calScore'])->name('test');
 

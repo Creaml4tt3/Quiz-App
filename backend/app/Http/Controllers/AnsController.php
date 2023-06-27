@@ -56,9 +56,10 @@ class AnsController extends Controller
             ->get();
 
         $data2 = DB::table('solves')
-            ->leftJoin('questions', 'solves.question_id', '=', 'questions.id')
-            ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
-            // ->groupBy('choice.question_id')
+            //->leftJoin('questions', 'solves.question_id', '=', 'questions.questions_id')
+            // ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
+            ->select('solves.*')
+            ->orderBy('solves.question_id', 'asc')
             ->get();
 
         
@@ -78,6 +79,7 @@ class AnsController extends Controller
             }));
         }, $resultArray);
 
+
 //ans
         $ansArray = [];
         foreach ($data1 as $item) {
@@ -89,29 +91,34 @@ class AnsController extends Controller
 
         $a = $filteredArray;
         $b = $ansArray;
-
-
+        
+        $score = 0;
         $k = '';
-        for ($i=0; $i<count($a); $i++){
-            if(in_array($b[$i], $a[$i])){    
-                if(in_array($k, $a[$i])){
-                    if($b[$i]!=$k){
-                        $score++; 
+        for ($i = 0; $i < count($a); $i++) {
+            $bNoSpaces = str_replace(' ', '', $b[$i]);
+            $aNoSpaces = str_replace(' ', '', $a[$i]);
+        
+            if (in_array($bNoSpaces, $aNoSpaces)) {
+                if (in_array($k, $aNoSpaces)) {
+                    if ($bNoSpaces != $k) {
+                        $score++;
                     }
-                }
-                else{
-                    $score++; 
-                    $k = $b[$i];
+                } else {
+                    $score++;
+                    $k = $bNoSpaces;
                 }
             }
-
         }
+
+        
         
 
 
+        
         User::where('id', $id)
         ->update(['score' => $score]);
-
+        
+// dd($score);
 
     }
 
