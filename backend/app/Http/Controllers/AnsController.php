@@ -29,7 +29,7 @@ class AnsController extends Controller
                     'ans' => $item->ans,
                 ];
             });
-    
+
             return [
                 'user_id' => $data->user_id,
                 'name' => $data->name,
@@ -44,25 +44,28 @@ class AnsController extends Controller
         return response()->json($datauser);
 
 
-        
-        
+
+
     }
 
     function calScore($id){
 
         $data1 = DB::table('ans')
-            ->select('ans.*')
-            ->where('user_id', $id)
-            ->get();
+        ->leftJoin('questions', 'ans.question_id', '=', 'questions.questions_id')
+        ->select('ans.*','questions.type_language')
+        ->where('user_id', $id)
+        ->get();
+        $item = $data1->first();
+        $type_language = $item->type_language;
+    $data2 = DB::table('solves')
+        ->leftJoin('questions', 'solves.question_id', '=', 'questions.questions_id')
+        // ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
+        ->select('solves.*')
+        ->where('questions.type_language', $type_language)
+        ->orderBy('solves.question_id', 'asc')
+        ->get();
 
-        $data2 = DB::table('solves')
-            //->leftJoin('questions', 'solves.question_id', '=', 'questions.questions_id')
-            // ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
-            ->select('solves.*')
-            ->orderBy('solves.question_id', 'asc')
-            ->get();
 
-        
         $resultArray = [];
 
         foreach ($data2 as $row) {
@@ -91,13 +94,13 @@ class AnsController extends Controller
 
         $a = $filteredArray;
         $b = $ansArray;
-        
+
         $score = 0;
         $k = '';
         for ($i = 0; $i < count($a); $i++) {
             $bNoSpaces = str_replace(' ', '', $b[$i]);
             $aNoSpaces = str_replace(' ', '', $a[$i]);
-        
+
             if (in_array($bNoSpaces, $aNoSpaces)) {
                 if (in_array($k, $aNoSpaces)) {
                     if ($bNoSpaces != $k) {
@@ -110,53 +113,90 @@ class AnsController extends Controller
             }
         }
 
-        
-        
 
 
-        
+
+
+
         User::where('id', $id)
         ->update(['score' => $score]);
-        
+
 // dd($score);
 
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required', 
-            'email' => 'required',
-            // 'password' => 'required|min:8|confirmed',
-            'questions' => 'required',
-            // 'ans' => 'required',
-        ]);
+        // dd($request);
+        // $request->validate([
+        //     'username' => 'required',
+        //     'email' => 'required|email',
+        //     'questions' => 'required|array',
+        //     'questions.*.question_id' => 'required|integer',
+        //     'questions.*.ans' => 'array',
+        // ]);
 
-        $users = new User();
-        $users->name = $request->input('name');
-        $users->email = $request->input('email');
-        $users->password = $request->input('password');
-
-        $users->save();
+        $user = new User();
+        $user->name = $request->input('username');
+        $user->email = $request->input('email');
+        // $user->password = $request->input('password');
+        $user->save();
 
         $questions = $request->input('questions');
 
         foreach ($questions as $question) {
             $questionId = $question['question_id'];
             $ans = $question['ans'];
-    
-            foreach ($ans as $answer) {
-                $ansTable = new Ans;
-                $ansTable->question_id = $questionId;
-                // $answer = str_replace(" ", "", $answer);
-                $ansTable->ans = $answer;
-                $ansTable->user_id = $users->id;
-                $ansTable->save();
-            }
+
+            // if (is_array($ans)) {
+                foreach ($ans as $answer) {
+                    // if ($answer) {
+                        $ansTable = new Ans;
+                        $ansTable->question_id = $questionId;
+                        $ansTable->ans = $answer;
+                        $ansTable->user_id = $user->id;
+                        $ansTable->save();
+                    // }
+                }
+            // }
         }
-        $this->calScore($users->id);
-         
+
+        $this->calScore($user->id);
+
         return response()->json(['message' => 'Answers created successfully']);
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required',
+        //     // 'password' => 'required|min:8|confirmed',
+        //     'questions' => 'required',
+        //     // 'ans' => 'required',
+        // ]);
+
+        // $users = new User();
+        // $users->name = $request->input('name');
+        // $users->email = $request->input('email');
+        // $users->password = $request->input('password');
+
+        // $users->save();
+
+        // $questions = $request->input('questions');
+
+        // foreach ($questions as $question) {
+        //     $questionId = $question['question_id'];
+        //     $ans = $question['ans'];
+
+        //     foreach ($ans as $answer) {
+        //         $ansTable = new Ans;
+        //         $ansTable->question_id = $questionId;
+        //         // $answer = str_replace(" ", "", $answer);
+        //         $ansTable->ans = $answer;
+        //         $ansTable->user_id = $users->id;
+        //         $ansTable->save();
+        //     }
+        // }
+        // $this->calScore($users->id);
+
+        // return response()->json(['message' => 'Answers created successfully']);
     }
 
     public function destroy(Request $id)
@@ -166,7 +206,7 @@ class AnsController extends Controller
         Ans::where('user_id', $id)->delete(); // ModelName เป็นชื่อของโมเดลที่คุณต้องการลบข้อมูล
 
         return response()->json(['message' => 'Answers created successfully']);
-        
+
     }
 
 

@@ -7,17 +7,17 @@ import LangP from "../context/LangP";
 
 export default function Index() {
   const navigate = useNavigate();
-  const {lang,setLang} = useContext(LangP);
+  const { lang, setLang } = useContext(LangP);
 
-  const [dataUser ,setDataUser] = useState({
-    username : '',
-    email : "",
-    ans : [],
-  })
+  const [dataUser, setDataUser] = useState({
+    username: "",
+    email: "",
+    ans: [],
+  });
   const handleLang = (lang) => {
-    setLang(lang)
-    navigate('/quiz')
-  }
+    setLang(lang);
+    navigate("/quiz");
+  };
   return (
     <div className="flex justify-center w-[100%] h-[100vh] font-sans box-border p-[20px]">
       <div className="flex w-auto flex-col justify-between g-[20px]">
@@ -27,8 +27,8 @@ export default function Index() {
           <br />
           เวลาในการทำ 30 นาที
         </h1>
-        <button onClick={() => handleLang('JS') }>JS</button>
-        <button onClick={() =>handleLang('PHP') }>PHP</button>
+        <button onClick={() => handleLang("JS")}>JS</button>
+        <button onClick={() => handleLang("PHP")}>PHP</button>
       </div>
     </div>
   );

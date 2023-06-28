@@ -8,7 +8,7 @@ import LangP from "../context/LangP";
 
 export default function Componentquiz() {
   const navigate = useNavigate();
-  const {lang} = useContext(LangP);
+  const { lang } = useContext(LangP);
   const [quizData, setQuizData] = useState([]);
   const [data, setData] = useState({});
   const [activeChoice, setActiveChoice] = useState({});
@@ -16,24 +16,24 @@ export default function Componentquiz() {
   const [inputValues, setInputValues] = useState([]);
   const [questionData, setQuestionData] = useState([]);
   const [getData, setGetData] = useState([]);
-  
+  const [indexQuestion, setIndexQuestion] = useState(null);
+  const [submit, setSubmit] = useState(false);
+
   // const [score, setScore] = useState(null);
-// console.log(lang)
+  // console.log(lang)
   // getData
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/questions`)
-      .then((res) =>{
-        setQuizData(res.data)
-
-      }
-      )
+      .then((res) => {
+        setQuizData(res.data);
+      })
       .catch((err) =>
         // catch err จากหลังบ้าน Ex.Err ต่างๆจากหลังบ้าน
         console.log(err)
       );
   }, []);
-// console.log(data)
+  // console.log(data)
   // useEffect(() => {
   //   const intervalTime = setInterval(() => {
   //     setTimeOut((prevTime) => prevTime - 1);
@@ -79,28 +79,49 @@ export default function Componentquiz() {
         //   });
       });
     }
-    // console.log(data);
   }, [data, inputValues, min, seconds, navigate]);
+
   useEffect(() => {
-    let returnedData = []
-    const newDatas =  quizData.map(item => {
-      if(item.type_language === lang){
-        return item.questions
-      }
-      return null;
-    })
-    newDatas.forEach((data) => {
-      if (data !== null) {
-        Object.entries(data).forEach(([id, item]) => {
-          returnedData.push(item)
-        });
-      }
-    });
-    setQuestionData(returnedData)
-
-
-  }, [data,questionData]);
-  // console.log(Array.isArray(questionData));
+    if (submit) {
+      Swal.fire({
+        title: "ต้องการส่งเลยใช่ไหม",
+        text: "ถ้าพร้อมก็กดยืนยันเลย",
+        icon: "question",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยังไม่พร้อม",
+        showCancelButton: true,
+        cancelButtonColor: "red",
+        confirmButtonColor: "green",
+      }).then((res) => {
+        if (res.dismiss) {
+          setSubmit(false);
+        }
+        if (res.isConfirmed) {
+          console.log(data);
+          axios
+            .post("http://127.0.0.1:8000/api/ans", data)
+            .then((res) => {
+              Swal.fire({
+                text: `${res.data}`,
+                icon: "success",
+              }).then((res) => {
+                if (res.isConfirmed) {
+                  navigate("/");
+                }
+              });
+            })
+            .catch((err) => {
+              Swal.fire({
+                text: `${err}`,
+                icon: "warning",
+              }).then((res) => {
+                res.dismiss && setSubmit(false);
+              });
+            });
+        }
+      });
+    }
+  }, [data, submit]);
 
   const handleChoiceSelect = (questionId, choiceIndex) => {
     setActiveChoice((prev) => ({
@@ -120,24 +141,80 @@ export default function Componentquiz() {
     setInputValues(updatedInputValues);
   };
 
+  useEffect(() => {
+    lang.toLowerCase() === "js" ? setIndexQuestion("0") : setIndexQuestion("1");
+  }, [lang]);
+
+  const filterType = () => {
+    const data = quizData.map((item) => {
+      if (item.type_language.toLowerCase() === lang.toLowerCase()) {
+        return item.questions;
+      }
+      return null;
+    });
+    if (data !== null) {
+      return data;
+    }
+  };
+
+  const hellworld = filterType().map((item) => {
+    // console.log(item);
+    if (item !== null || undefined) {
+      return item;
+    }
+    return [];
+  });
+
   const handleSubmit = () => {
     const newData = inputValues.map((inputValue) => {
       if (inputValue.hasOwnProperty("select")) {
         // Retrieve the values of the 'select' property
         inputValue["question_id"] = inputValue?.id; // Assign the values to the 'ans' property
         inputValue["ans"] = [inputValue.select]; // Assign the values to the 'ans' property
-        delete inputValue.id; // Remove the 'select' property
-        delete inputValue.select; // Remove the 'select' property
+        // delete inputValue.id; // Remove the 'select' property
+        // delete inputValue.select; // Remove the 'select' property
       } else {
         const reducedObj = Object.keys(inputValue).reduce(
           (acc, key) => {
-            console.log(acc);
             if (key !== "question_id") {
-              acc.ans.push(
-                inputValue["input"] || null,
-                inputValue["input1"] || null,
-                inputValue["input2"] || null
-              );
+              if (acc.ans !== null || acc.ans !== undefined) {
+                if (
+                  inputValue["input1"] !== null &&
+                  inputValue["input1"] !== "" &&
+                  inputValue["input1"] !== undefined &&
+                  (inputValue["input"] === "" ||
+                    inputValue["input"] === null ||
+                    inputValue["input"] === undefined)
+                ) {
+                  acc.ans.push("", inputValue[key]);
+                } else if (
+                  (inputValue["input1"] === null ||
+                    inputValue["input1"] === "" ||
+                    inputValue["input1"] === undefined) &&
+                  (inputValue["input"] === "" ||
+                    inputValue["input"] === null ||
+                    inputValue["input"] === undefined) &&
+                  inputValue["input2"] !== "" &&
+                  inputValue["input2"] !== null &&
+                  inputValue["input2"] !== undefined
+                ) {
+                  acc.ans.push("", "", inputValue[key]);
+                } else if (
+                  inputValue["input"] !== null &&
+                  inputValue["input"] !== "" &&
+                  inputValue["input"] !== undefined &&
+                  (inputValue["input1"] === "" ||
+                    inputValue["input1"] === null ||
+                    inputValue["input1"] === undefined) &&
+                  inputValue["input2"] !== "" &&
+                  inputValue["input2"] !== null &&
+                  inputValue["input2"] !== undefined
+                ) {
+                  acc.ans.push(inputValue["input"], "", inputValue["input2"]);
+                } else {
+                  acc.ans.push(inputValue[key]);
+                }
+              }
             }
             return acc;
           },
@@ -151,11 +228,13 @@ export default function Componentquiz() {
     const result = {
       username: data.username,
       email: data.email,
-      questions: newData,
+      questions: newData.map((inputValue) => ({
+        ...inputValue,
+        ans: inputValue.ans.slice(0, 3), // Include the first three elements of the 'ans' array
+      })),
     };
-
     setData(result);
-    // console.log(data);
+    setSubmit(true);
   };
 
   const handleChange = (e) => {
@@ -194,123 +273,143 @@ export default function Componentquiz() {
           value={data.email}
           onChange={(e) => handleChange(e)}
         />
+        <input
+          type="password"
+          className="password"
+          name="password"
+          value={data.password}
+          onChange={(e) => handleChange(e)}
+        />
 
-        {Array.isArray(questionData) && questionData.map((item, ind) => {
-         
-          const question_quiz = item.sub_question !== null && item.sub_question !== '' ? item.sub_question : null;
-        
-          // console.log(item);
-          // console.log(item.questions)
-      // console.log(question_quiz)
-          
+        {hellworld[indexQuestion] &&
+          hellworld[indexQuestion].map((item, ind) => {
+            const { sub_question, question, question_id, type, choices } = item;
+            // console.log(
+            //   "sub",
+            //   sub_question,
+            //   "ques",
+            //   question,
+            //   "id",
+            //   question_id,
+            //   "type",
+            //   type,
+            //   "ch",
+            //   choices
+            // );
+            const question_quiz = sub_question;
+            // console.log(question_quiz);
+            // console.log(item);
+            // console.log(item.questions)
+            // console.log(question_quiz)
 
-          const inputObj = {
-            "%i%": (
-              <input
-                type="text"
-                name="input"
-                value={
-                  Array.isArray(inputValues) &&
-                  inputValues.find(
-                    (obj) => obj["question_id"] === item.question_id
-                  )?.input
-                    ? inputValues.find(
-                        (obj) => obj["question_id"] === item.question_id
-                      ).input
-                    : ""
-                }
-                onChange={(e) => handleInput(item.question_id, e)}
-              />
-            ),
-            "%i1%": (
-              <input
-                type="text"
-                name="input1"
-                value={
-                  Array.isArray(inputValues) &&
-                  inputValues.find(
-                    (obj) => obj["question_id"] === item.question_id
-                  )?.input1
-                    ? inputValues.find(
-                        (obj) => obj["question_id"] === item.question_id
-                      ).input1
-                    : ""
-                }
-                onChange={(e) => handleInput(item.question_id, e)}
-              />
-            ),
-            "%i2%": (
-              <input
-                style={{ margin: "0px 16px 0px" }}
-                type="text"
-                name="input2"
-                value={
-                  Array.isArray(inputValues) &&
-                  inputValues.find(
-                    (obj) => obj["question_id"] === item.question_id
-                  )?.input2
-                    ? inputValues.find(
-                        (obj) => obj["question_id"] === item.question_id
-                      ).input2
-                    : ""
-                }
-                onChange={(e) => handleInput(item.question_id, e)}
-              />
-            ),
-            function: (
-              <span className=" text-purple-400 text-xl">function </span>
-            ),
-            return: <span className="text-purple-400 text-xl">return </span>,
-            const: <span className="text-purple-500 text-xl">const </span>,
-          };
-          const swap_text = () => {
-            const text_array = question_quiz.split(" ");
-            const a = text_array.map((item) => {
-              if (item in inputObj) item = inputObj[item];
-              else item += " ";
-              return item;
-            });
-            return a;
-          };
+            const inputObj = {
+              "%i%": (
+                <input
+                  type="text"
+                  name="input"
+                  value={
+                    Array.isArray(inputValues) &&
+                    inputValues.find(
+                      (obj) => obj["question_id"] === question_id
+                    )?.input
+                      ? inputValues.find(
+                          (obj) => obj["question_id"] === question_id
+                        ).input
+                      : ""
+                  }
+                  onChange={(e) => handleInput(question_id, e)}
+                />
+              ),
+              "%i1%": (
+                <input
+                  type="text"
+                  name="input1"
+                  value={
+                    Array.isArray(inputValues) &&
+                    inputValues.find(
+                      (obj) => obj["question_id"] === question_id
+                    )?.input1
+                      ? inputValues.find(
+                          (obj) => obj["question_id"] === question_id
+                        ).input1
+                      : ""
+                  }
+                  onChange={(e) => handleInput(question_id, e)}
+                />
+              ),
+              "%i2%": (
+                <input
+                  style={{ margin: "0px 16px 0px" }}
+                  type="text"
+                  name="input2"
+                  value={
+                    Array.isArray(inputValues) &&
+                    inputValues.find(
+                      (obj) => obj["question_id"] === question_id
+                    )?.input2
+                      ? inputValues.find(
+                          (obj) => obj["question_id"] === question_id
+                        ).input2
+                      : ""
+                  }
+                  onChange={(e) => handleInput(question_id, e)}
+                />
+              ),
+              function: (
+                <span className=" text-purple-400 text-xl">function </span>
+              ),
+              return: <span className="text-purple-400 text-xl">return </span>,
+              const: <span className="text-purple-500 text-xl">const </span>,
+            };
+            const swap_text = () => {
+              const text_array = question_quiz.split(" ");
+              const a = text_array.map((item) => {
+                if (item in inputObj) item = inputObj[item];
+                else item += " ";
+                return item;
+              });
+              return a;
+            };
 
-          return (
-            <div className="flex mb-[24px] w-[50%] " key={item.question_id}>
-              <div className="flex flex-col gap-[20px] w-full  ">
-                <div>
-                  {ind + 1}. {item.question}
-                </div>
+            return (
+              <div className="flex mb-[24px] w-[50%] " key={question_id}>
+                <div className="flex flex-col gap-[20px] w-full  ">
+                  <div>
+                    {ind + 1}. {question}
+                    {type}
+                  </div>
 
-                {item.type_question === "key" ? (
-                  <pre>
-                    <code>{swap_text()}</code>
-                  </pre>
-                ) : (
-                  <div className="flex gap-[16px] w-[100%] ">
-                    {item.choices?.map((choiz, indexchoice) => {
-                      return (
-                        <div
-                          key={choiz.id}
-                          className={`flex w-[25%] ${
-                            activeChoice[item.question_id] === choiz
-                              ? "bg-[#bbadad67] text-black "
-                              : "bg-blue-900 text-white"
-                          }
+                  {type === "key" ? (
+                    <pre>
+                      <code>{swap_text()}</code>{" "}
+                    </pre>
+                  ) : (
+                    <div className="flex gap-[16px] w-[100%] ">
+                      {choices?.map((choiz, indexchoice) => {
+                        return (
+                          <div
+                            key={choiz.id}
+                            className={`flex w-[25%] ${
+                              activeChoice[question_id] === choiz.choice
+                                ? "bg-[#bbadad67] text-black "
+                                : "bg-blue-900 text-white"
+                            }
                             p-[24px]  break-all
                             justify-center rounded-[16px] box-border text-2 `}
-                          onClick={() => {
-                            handleChoiceSelect(item.question_id, choiz);
-                          }}
-                        >
-                          {choiz}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                            onClick={() => {
+                              handleChoiceSelect(question_id, choiz.choice);
+                            }}
+                          >
+                            {choiz.choice}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
         <footer className="bttton-submit-container flex justify-center w-[50%] ">
           <button
             className="button-submit p-4 text-white bg-[#213555] m-10 rounded-xl"
