@@ -13,7 +13,8 @@ export default function Componentquiz() {
   const [data, setData] = useState({});
   const [activeChoice, setActiveChoice] = useState({});
   const [timeOut, setTimeOut] = useState(1000 * 60);
-  const [inputValues, setInputValues] = useState([]);
+  const [inputValues, setInputValues] = useState([]);  
+  const [Questions, setQuestions] = useState([]);
   const [questionData, setQuestionData] = useState([]);
   const [getData, setGetData] = useState([]);
   const [indexQuestion, setIndexQuestion] = useState(null);
@@ -131,7 +132,7 @@ export default function Componentquiz() {
 
     const thisInput =
       Array.isArray(inputValues) &&
-      inputValues.find((obj) => obj["question_id"] === questionId);
+      inputValues.find((obj) => obj["id"] === questionId);
 
     const updatedInputValues = thisInput
       ? inputValues.map((obj) =>
@@ -140,6 +141,9 @@ export default function Componentquiz() {
       : [...inputValues, { id: questionId, select: choiceIndex }];
     setInputValues(updatedInputValues);
   };
+
+ 
+  
 
   useEffect(() => {
     lang.toLowerCase() === "js" ? setIndexQuestion("0") : setIndexQuestion("1");
@@ -171,8 +175,8 @@ export default function Componentquiz() {
         // Retrieve the values of the 'select' property
         inputValue["question_id"] = inputValue?.id; // Assign the values to the 'ans' property
         inputValue["ans"] = [inputValue.select]; // Assign the values to the 'ans' property
-        // delete inputValue.id; // Remove the 'select' property
-        // delete inputValue.select; // Remove the 'select' property
+        delete inputValue.id; // Remove the 'select' property
+        delete inputValue.select; // Remove the 'select' property
       } else {
         const reducedObj = Object.keys(inputValue).reduce(
           (acc, key) => {

@@ -19,5 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/index', [QuestionController::class, 'index'])->name('aa');
-//Route::get('/test/{id}', [AnsController::class, 'calScore'])->name('test');
+Route::get('/test/{id}', [AnsController::class, 'calScore'])->name('test');
 

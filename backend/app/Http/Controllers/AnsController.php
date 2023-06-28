@@ -54,28 +54,48 @@ class AnsController extends Controller
         ->leftJoin('questions', 'ans.question_id', '=', 'questions.questions_id')
         ->select('ans.*','questions.type_language')
         ->where('user_id', $id)
+        ->orderBy('ans.question_id', 'asc')
         ->get();
         $item = $data1->first();
         $type_language = $item->type_language;
-    $data2 = DB::table('solves')
-        ->leftJoin('questions', 'solves.question_id', '=', 'questions.questions_id')
-        // ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
-        ->select('solves.*')
-        ->where('questions.type_language', $type_language)
-        ->orderBy('solves.question_id', 'asc')
-        ->get();
+
+        $data2 = DB::table('solves')
+            ->leftJoin('questions', 'solves.question_id', '=', 'questions.questions_id')
+            // ->select('questions.*', 'solves.question_id','solves.ans1','solves.ans2','solves.ans3','solves.ans4')
+            ->select('solves.*')
+            ->where('questions.type_language', $type_language)
+            ->orderBy('solves.question_id', 'asc')
+            ->get();
 
 
+        $idArray = [];
+        foreach ($data1 as $item) {
+            $idArray[] = $item->question_id;
+        }
         $resultArray = [];
 
         foreach ($data2 as $row) {
-            $resultArray[] = [
-                $row->ans1,
-                $row->ans2,
-                $row->ans3,
-                $row->ans4,
-            ];
+            if (in_array($row->question_id, $idArray)) {
+                $ansArray = [];
+                if ($row->ans1 !== null && $row->ans1 !== "") {
+                    $ansArray[] = $row->ans1;
+                }
+                if ($row->ans2 !== null && $row->ans2 !== "") {
+                    $ansArray[] = $row->ans2;
+                }
+                if ($row->ans3 !== null && $row->ans3 !== "") {
+                    $ansArray[] = $row->ans3;
+                }
+                if ($row->ans4 !== null && $row->ans4 !== "") {
+                    $ansArray[] = $row->ans4;
+                }
+                
+                $resultArray[] = $ansArray;
+            }
         }
+        
+
+        
         $filteredArray = array_map(function($row) {
             return array_values(array_filter($row, function($value) {
                 return !is_null($value);
@@ -88,6 +108,7 @@ class AnsController extends Controller
         foreach ($data1 as $item) {
             $ansArray[] = $item->ans;
         }
+       
 
         $score = 0;
 
@@ -95,46 +116,71 @@ class AnsController extends Controller
         $a = $filteredArray;
         $b = $ansArray;
 
-        $score = 0;
-        $k = '';
+
+        $k = '*****w';
+        $test = [];
+
         for ($i = 0; $i < count($a); $i++) {
             $bNoSpaces = str_replace(' ', '', $b[$i]);
             $aNoSpaces = str_replace(' ', '', $a[$i]);
-
+            
             if (in_array($bNoSpaces, $aNoSpaces)) {
                 if (in_array($k, $aNoSpaces)) {
                     if ($bNoSpaces != $k) {
                         $score++;
+                        array_push($test,1);
+                    }
+                    else{
+                        array_push($test,0);
                     }
                 } else {
                     $score++;
+                    array_push($test,1);
                     $k = $bNoSpaces;
+
                 }
+            }else{
+                array_push($test,0);
             }
         }
 
-
-
-
+        $score = 0;
+        $answeredQuestions = [];
+        
+        foreach ($test as $key => $value) {
+            $questionId = $idArray[$key];
+        
+            if (!in_array($questionId, $answeredQuestions)) {
+                $answeredQuestions[] = $questionId;
+                $totalAnswers = count(array_filter($idArray, function ($id) use ($questionId) {
+                    return $id === $questionId;
+                }));
+        
+                $correctAnswers = 0;
+                for ($i = $key; $i < $key + $totalAnswers; $i++) {
+                    if ($test[$i] === 1) {
+                        $correctAnswers++;
+                    }
+                }
+        
+                $score += $correctAnswers / $totalAnswers;
+            }
+        }
+        
+        
+//    dd($data1,$data2);     
 
 
         User::where('id', $id)
         ->update(['score' => $score]);
 
-// dd($score);
+// dd($a);
 
     }
 
     public function store(Request $request)
     {
         // dd($request);
-        // $request->validate([
-        //     'username' => 'required',
-        //     'email' => 'required|email',
-        //     'questions' => 'required|array',
-        //     'questions.*.question_id' => 'required|integer',
-        //     'questions.*.ans' => 'array',
-        // ]);
 
         $user = new User();
         $user->name = $request->input('username');
@@ -164,39 +210,7 @@ class AnsController extends Controller
         $this->calScore($user->id);
 
         return response()->json(['message' => 'Answers created successfully']);
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required',
-        //     // 'password' => 'required|min:8|confirmed',
-        //     'questions' => 'required',
-        //     // 'ans' => 'required',
-        // ]);
-
-        // $users = new User();
-        // $users->name = $request->input('name');
-        // $users->email = $request->input('email');
-        // $users->password = $request->input('password');
-
-        // $users->save();
-
-        // $questions = $request->input('questions');
-
-        // foreach ($questions as $question) {
-        //     $questionId = $question['question_id'];
-        //     $ans = $question['ans'];
-
-        //     foreach ($ans as $answer) {
-        //         $ansTable = new Ans;
-        //         $ansTable->question_id = $questionId;
-        //         // $answer = str_replace(" ", "", $answer);
-        //         $ansTable->ans = $answer;
-        //         $ansTable->user_id = $users->id;
-        //         $ansTable->save();
-        //     }
-        // }
-        // $this->calScore($users->id);
-
-        // return response()->json(['message' => 'Answers created successfully']);
+       
     }
 
     public function destroy(Request $id)
