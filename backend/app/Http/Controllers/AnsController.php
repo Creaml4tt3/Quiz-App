@@ -169,6 +169,8 @@ class AnsController extends Controller
                 $score += $correctAnswers / $totalAnswers;
             }
         }
+
+        $score = number_format($score, 2);
         
         // dd($score);
 //    dd($data1,$data2);     
