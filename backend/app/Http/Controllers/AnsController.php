@@ -47,6 +47,7 @@ class AnsController extends Controller
 
 
     }
+  
 
     function calScore($id){
 
@@ -72,6 +73,7 @@ class AnsController extends Controller
         foreach ($data1 as $item) {
             $idArray[] = $item->question_id;
         }
+  
         $resultArray = [];
 
         foreach ($data2 as $row) {
@@ -93,8 +95,9 @@ class AnsController extends Controller
                 $resultArray[] = $ansArray;
             }
         }
+       
         
-
+// dd($resultArray,$idArray);
         
         $filteredArray = array_map(function($row) {
             return array_values(array_filter($row, function($value) {
@@ -115,7 +118,7 @@ class AnsController extends Controller
 
         $a = $filteredArray;
         $b = $ansArray;
-
+// dd($a,$b);
 
         $k = '*****w';
         $test = [];
@@ -167,7 +170,7 @@ class AnsController extends Controller
             }
         }
         
-        
+        // dd($score);
 //    dd($data1,$data2);     
 
 
@@ -182,6 +185,18 @@ class AnsController extends Controller
     {
         // dd($request);
 
+        $data2 = DB::table('solves')
+        ->select('solves.question_id')
+        ->orderBy('solves.question_id', 'asc')
+        ->get();
+    
+        $countedData = $data2->groupBy('question_id')
+            ->map(function ($group) {
+                return count($group);
+            })
+            ->toArray();
+        
+
         $user = new User();
         $user->name = $request->input('username');
         $user->email = $request->input('email');
@@ -194,23 +209,25 @@ class AnsController extends Controller
             $questionId = $question['question_id'];
             $ans = $question['ans'];
 
-            // if (is_array($ans)) {
-                foreach ($ans as $answer) {
-                    // if ($answer) {
+            foreach ($countedData as $question_id => $count) {
+                if ($questionId == $question_id) {
+                    for($i=0;$i<$count;$i++){
                         $ansTable = new Ans;
                         $ansTable->question_id = $questionId;
-                        $ansTable->ans = $answer;
+                        $ansTable->ans = $ans[$i];
                         $ansTable->user_id = $user->id;
                         $ansTable->save();
-                    // }
+                    }
                 }
-            // }
+
+            }
         }
 
         $this->calScore($user->id);
+        
 
         return response()->json(['message' => 'Answers created successfully']);
-       
+
     }
 
     public function destroy(Request $id)
