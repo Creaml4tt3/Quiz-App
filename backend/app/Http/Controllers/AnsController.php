@@ -19,7 +19,7 @@ class AnsController extends Controller
 
         $datauser = Ans::leftJoin('users', 'ans.user_id', '=', 'users.id')
         ->leftJoin('questions', 'ans.question_id', '=', 'questions.questions_id')
-        ->select('ans.*', 'users.id as user_id','users.name','users.email','users.score','questions.question')
+        ->select('ans.*', 'users.id as user_id','users.name','users.email','users.score','questions.*')
         ->get()
         ->groupBy('user_id')
         ->map(function ($items) {
@@ -30,20 +30,25 @@ class AnsController extends Controller
                         'ans' => $i->ans,
                     ];
                 });
-    
+
+
+
                 return [
                     'question_id' => $item->first()->question_id,
                     'question' => $item->first()->question,
-                    'anss' => $ans,
+                    'sub_question' => $item->first()->sub_question,
+                    'ans' => $ans,
                 ];
-            });
-    
+            })->toArray();
+
+            $question = array_values($question);
+
             return [
                 'user_id' => $data->user_id,
                 'name' => $data->name,
                 'email' => $data->email,
                 'score' => $data->score,
-                'questions' => $question,
+                'ans' => $question
             ];
         })
         ->values();
@@ -54,7 +59,7 @@ class AnsController extends Controller
 
 
     }
-  
+
 
     function calScore($id){
 
@@ -80,7 +85,7 @@ class AnsController extends Controller
         foreach ($data1 as $item) {
             $idArray[] = $item->question_id;
         }
-  
+
         $resultArray = [];
 
         foreach ($data2 as $row) {
@@ -98,14 +103,14 @@ class AnsController extends Controller
                 if ($row->ans4 !== null && $row->ans4 !== "") {
                     $ansArray[] = $row->ans4;
                 }
-                
+
                 $resultArray[] = $ansArray;
             }
         }
-       
-        
+
+
 // dd($resultArray,$idArray);
-        
+
         $filteredArray = array_map(function($row) {
             return array_values(array_filter($row, function($value) {
                 return !is_null($value);
@@ -118,7 +123,7 @@ class AnsController extends Controller
         foreach ($data1 as $item) {
             $ansArray[] = $item->ans;
         }
-       
+
 
         $score = 0;
 
@@ -133,7 +138,7 @@ class AnsController extends Controller
         for ($i = 0; $i < count($a); $i++) {
             $bNoSpaces = str_replace(' ', '', $b[$i]);
             $aNoSpaces = str_replace(' ', '', $a[$i]);
-            
+
             if (in_array($bNoSpaces, $aNoSpaces)) {
                 if (in_array($k, $aNoSpaces)) {
                     if ($bNoSpaces != $k) {
@@ -156,31 +161,31 @@ class AnsController extends Controller
 
         $score = 0;
         $answeredQuestions = [];
-        
+
         foreach ($test as $key => $value) {
             $questionId = $idArray[$key];
-        
+
             if (!in_array($questionId, $answeredQuestions)) {
                 $answeredQuestions[] = $questionId;
                 $totalAnswers = count(array_filter($idArray, function ($id) use ($questionId) {
                     return $id === $questionId;
                 }));
-        
+
                 $correctAnswers = 0;
                 for ($i = $key; $i < $key + $totalAnswers; $i++) {
                     if ($test[$i] === 1) {
                         $correctAnswers++;
                     }
                 }
-        
+
                 $score += $correctAnswers / $totalAnswers;
             }
         }
 
         $score = number_format($score, 2);
-        
+
         // dd($score);
-//    dd($data1,$data2);     
+//    dd($data1,$data2);
 
 
         User::where('id', $id)
@@ -198,13 +203,13 @@ class AnsController extends Controller
         ->select('solves.question_id')
         ->orderBy('solves.question_id', 'asc')
         ->get();
-    
+
         $countedData = $data2->groupBy('question_id')
             ->map(function ($group) {
                 return count($group);
             })
             ->toArray();
-        
+
 
         $user = new User();
         $user->name = $request->input('username');
@@ -233,7 +238,7 @@ class AnsController extends Controller
         }
 
         $this->calScore($user->id);
-        
+
 
         return response()->json(['message' => 'Answers created successfully']);
 

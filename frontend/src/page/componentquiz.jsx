@@ -12,16 +12,14 @@ export default function Componentquiz() {
   const [quizData, setQuizData] = useState([]);
   const [data, setData] = useState({});
   const [activeChoice, setActiveChoice] = useState({});
-  const [timeOut, setTimeOut] = useState(1000 * 60);
-  const [inputValues, setInputValues] = useState([]);  
+  const [timeOut, setTimeOut] = useState(30 * 60);
+  const [inputValues, setInputValues] = useState([]);
   const [Questions, setQuestions] = useState([]);
   const [questionData, setQuestionData] = useState([]);
   const [getData, setGetData] = useState([]);
   const [indexQuestion, setIndexQuestion] = useState(null);
   const [submit, setSubmit] = useState(false);
 
-  // const [score, setScore] = useState(null);
-  // console.log(lang)
   // getData
   useEffect(() => {
     axios
@@ -35,15 +33,15 @@ export default function Componentquiz() {
       );
   }, []);
   // console.log(data)
-  // useEffect(() => {
-  //   const intervalTime = setInterval(() => {
-  //     setTimeOut((prevTime) => prevTime - 1);
-  //   }, 1000);
+  useEffect(() => {
+    const intervalTime = setInterval(() => {
+      setTimeOut((prevTime) => prevTime - 1);
+    }, 1000);
 
-  //   return () => {
-  //     clearInterval(intervalTime);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(intervalTime);
+    };
+  }, []);
 
   const min = Math.floor(timeOut / 60);
   const seconds = timeOut % 60;
@@ -66,18 +64,18 @@ export default function Componentquiz() {
         confirmButtonText: "เออรู้ละ",
       }).then((result) => {
         result.isConfirmed && navigate("/");
-        // axios
-        //   .post(`${url}`,data)
-        //   .then((res) => {
-        //     Swal.fire({
-        //       text: res.data,
-        //       icon: "success",
-        //       timer: 5000,
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+        axios
+          .post(`${process.env.REACT_APP_API}api/ans`, data)
+          .then((res) => {
+            Swal.fire({
+              text: "ส่งสำเร็จ",
+              icon: "success",
+              timer: 5000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
     }
   }, [data, inputValues, min, seconds, navigate]);
@@ -103,7 +101,7 @@ export default function Componentquiz() {
             .post("http://127.0.0.1:8000/api/ans", data)
             .then((res) => {
               Swal.fire({
-                text: `${res.data}`,
+                text: `ส่งสำเร็จ`,
                 icon: "success",
               }).then((res) => {
                 if (res.isConfirmed) {
@@ -142,9 +140,6 @@ export default function Componentquiz() {
     setInputValues(updatedInputValues);
   };
 
- 
-  
-
   useEffect(() => {
     lang.toLowerCase() === "js" ? setIndexQuestion("0") : setIndexQuestion("1");
   }, [lang]);
@@ -181,8 +176,11 @@ export default function Componentquiz() {
           (acc, key) => {
             if (key !== "question_id") {
               if (acc.ans !== null || acc.ans !== undefined) {
-                  acc.ans.push(inputValue["input"]||null,inputValue["input1"]||null,inputValue["input2"]||null);
-
+                acc.ans.push(
+                  inputValue["input"] || null,
+                  inputValue["input1"] || null,
+                  inputValue["input2"] || null
+                );
               }
             }
             return acc;
@@ -228,27 +226,24 @@ export default function Componentquiz() {
   return (
     <div className="flex flex-col gap-[24px] items-center">
       <Index min={min} seconds={seconds}>
-        <input
-          type="text"
-          className="username"
-          name="username"
-          value={data.username}
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type="email"
-          className="email"
-          name="email"
-          value={data.email}
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type="password"
-          className="password"
-          name="password"
-          value={data.password}
-          onChange={(e) => handleChange(e)}
-        />
+        <div className="flex w-full justify-center gap-4 mb-10">
+          <label htmlFor="username">username :</label>
+          <input
+            type="text"
+            className="username"
+            name="username"
+            value={data.username}
+            onChange={(e) => handleChange(e)}
+          />
+          <label htmlFor="email">email :</label>
+          <input
+            type="email"
+            className="email"
+            name="email"
+            value={data.email}
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
 
         {hellworld[indexQuestion] &&
           hellworld[indexQuestion].map((item, ind) => {

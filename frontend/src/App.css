@@ -17,6 +17,19 @@
   }
 }
 
+.Modal-Container {
+  background: rgba(0.7, 0.8, 0.8, 0.8);
+  opacity: 8;
+}
+
+.Modal-Container::-webkit-scrollbar {
+  height: 6px;
+  background-color: $disable;
+}
+.Modal-Container::-webkit-scrollbar-thumb {
+  background-color: $red;
+}
+
 pre {
   display: flex;
   flex-direction: row;
