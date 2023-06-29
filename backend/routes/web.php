@@ -18,6 +18,6 @@ use App\Http\Controllers\QuestionController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/index', [QuestionController::class, 'index'])->name('aa');
+Route::get('/index', [AnsController::class, 'index'])->name('aa');
 Route::get('/test/{id}', [AnsController::class, 'calScore'])->name('test');
 Route::get('/testAdd', [AnsController::class, 'store'])->name('ss');

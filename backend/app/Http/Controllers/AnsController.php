@@ -18,28 +18,35 @@ class AnsController extends Controller
     {
 
         $datauser = Ans::leftJoin('users', 'ans.user_id', '=', 'users.id')
-        ->select('ans.*', 'users.id as user_id','users.name','users.email','users.score')
+        ->leftJoin('questions', 'ans.question_id', '=', 'questions.questions_id')
+        ->select('ans.*', 'users.id as user_id','users.name','users.email','users.score','questions.question')
         ->get()
         ->groupBy('user_id')
         ->map(function ($items) {
             $data = $items->first();
-            $ans = $items->map(function ($item) {
+            $question = $items->groupBy('question_id')->map(function ($item) {
+                $ans = $item->map(function ($i) {
+                    return [
+                        'ans' => $i->ans,
+                    ];
+                });
+    
                 return [
-                    'question_id' => $item->question_id,
-                    'ans' => $item->ans,
+                    'question_id' => $item->first()->question_id,
+                    'question' => $item->first()->question,
+                    'anss' => $ans,
                 ];
             });
-
+    
             return [
                 'user_id' => $data->user_id,
                 'name' => $data->name,
                 'email' => $data->email,
                 'score' => $data->score,
-                'anss' => $ans,
+                'questions' => $question,
             ];
         })
         ->values();
-
 
         return response()->json($datauser);
 
