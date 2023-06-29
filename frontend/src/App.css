@@ -93,3 +93,57 @@ input {
     align-items: start;
   }
 }
+
+.Table-Sale {
+  @apply w-full border-collapse rounded-lg bg-black;
+}
+.Table-Row {
+  @apply border-b-2  bg-transparent py-3;
+  /* border-red */
+}
+.Table-Head-Text {
+  @apply py-3 text-base px-4  text-white;
+  /* text-base px-4 font-lato  */
+}
+.Table-Head-Text.Table-Number {
+  @apply w-12;
+}
+.Table-Head-Text.Table-Sale-List {
+  @apply w-20;
+}
+.Table-Head-Text.Table-Date {
+  @apply w-28;
+}
+.Table-Head-Text.Table-Action {
+  @apply w-36;
+}
+.Table-Body {
+  text-align: center;
+  background-color: rgb(43, 5, 5);
+  /* display: flex; */
+  /* background-color: green; */
+}
+.Table-Info {
+  @apply w-fit py-2 px-4 text-white;
+}
+.Table-Info.Table-Index {
+  @apply text-center;
+}
+.Table-Row:nth-child(even) {
+  @apply w-fit bg-[#282727CC] py-2 px-4;
+}
+
+.View-Container {
+  width: 100vw;
+  heigh: 100vh;
+  display: flex;
+  position: relative;
+  /* background-color: blue; */
+}
+
+.Modal {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+}

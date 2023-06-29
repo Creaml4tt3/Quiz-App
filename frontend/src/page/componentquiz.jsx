@@ -162,7 +162,6 @@ export default function Componentquiz() {
   };
 
   const hellworld = filterType().map((item) => {
-    // console.log(item);
     if (item !== null || undefined) {
       return item;
     }
@@ -182,42 +181,8 @@ export default function Componentquiz() {
           (acc, key) => {
             if (key !== "question_id") {
               if (acc.ans !== null || acc.ans !== undefined) {
-                // if (
-                //   inputValue["input1"] !== null &&
-                //   inputValue["input1"] !== "" &&
-                //   inputValue["input1"] !== undefined &&
-                //   (inputValue["input"] === "" ||
-                //     inputValue["input"] === null ||
-                //     inputValue["input"] === undefined)
-                // ) {
-                //   acc.ans.push("", inputValue[key]);
-                // } else if (
-                //   (inputValue["input1"] === null ||
-                //     inputValue["input1"] === "" ||
-                //     inputValue["input1"] === undefined) &&
-                //   (inputValue["input"] === "" ||
-                //     inputValue["input"] === null ||
-                //     inputValue["input"] === undefined) &&
-                //   inputValue["input2"] !== "" &&
-                //   inputValue["input2"] !== null &&
-                //   inputValue["input2"] !== undefined
-                // ) {
-                //   acc.ans.push("", "", inputValue[key]);
-                // } else if (
-                //   inputValue["input"] !== null &&
-                //   inputValue["input"] !== "" &&
-                //   inputValue["input"] !== undefined &&
-                //   (inputValue["input1"] === "" ||
-                //     inputValue["input1"] === null ||
-                //     inputValue["input1"] === undefined) &&
-                //   inputValue["input2"] !== "" &&
-                //   inputValue["input2"] !== null &&
-                //   inputValue["input2"] !== undefined
-                // ) {
-                //   acc.ans.push(inputValue["input"], "", inputValue["input2"]);
-                // } else {
                   acc.ans.push(inputValue["input"]||null,inputValue["input1"]||null,inputValue["input2"]||null);
-                  // }
+
               }
             }
             return acc;
