@@ -1,0 +1,227 @@
+﻿1,select,JS,สำหรับการประกาศตัวแปรใน JavaScript คำสั่งใดที่ถูกต้อง?,,19/6/2023 13:17,19/6/2023 13:17
+2,select,JS,"จากโค้ดต่อไปนี้ใน JavaScript:
+let x = 5;
+let y = ""10"";
+let result = x + y;
+ค่าของตัวแปร result คืออะไร?",,19/6/2023 13:17,19/6/2023 13:17
+3,select,JS,"ใน JavaScript, คำสั่งใดที่ใช้ในการกำหนดเงื่อนไขเพื่อทำงานแบบเลือก (conditional)?",,19/6/2023 13:17,19/6/2023 13:17
+4,select,JS,คำสั่งใดที่ใช้ในการเขียนข้อความลงในคอนโซล (console) ใน JavaScript?,,19/6/2023 13:17,19/6/2023 13:17
+5,select,JS,"ใน JavaScript, การใช้งานโครงสร้างข้อมูลแบบ Array สามารถทำได้โดยใช้คำสั่งใด?",,19/6/2023 13:17,19/6/2023 13:17
+6,select,JS,"สำหรับฟังก์ชันใน JavaScript, คำสั่งใดที่ใช้ในการส่งค่ากลับ (return value) จากฟังก์ชัน?",,19/6/2023 13:17,19/6/2023 13:17
+7,key,JS,ฟังก์ชั่นคำนวณหาพื้นที่ (กว้าง * สูง) จงเติมคำในช่องว่าง,"function getArea(width,height) {        
+  return Number( %i% ) * Number( %i1% );
+}",19/6/2023 13:17,19/6/2023 13:17
+8,key,JS,ฟังก์ชั่นคำนวณหาพื้นที่วงกลม (PI * r ** 2) จงเติมคำในช่องว่าง,"function calculateCircleArea(radius) {
+  return  %i% .PI *  %i1%  **  %i2% ;
+}",19/6/2023 13:17,19/6/2023 13:17
+9,key,JS,ผลลัพธ์จากการ log จะได้เป็นอย่างไร,"const fruits = [""apple"", ""orange"", ""papaya""];
+fruits.forEach((fruit, index) => {
+  if (index === 1) {
+    return;
+  } else {
+    return console.log(fruit);
+  }
+});
+ %i% ",19/6/2023 13:17,19/6/2023 13:17
+10,key,JS,จงประกาศประเภทของตัวแปรต่อไปนี้ และ ผลลัพธ์จากการ log จะได้เป็นอย่างไร," %i%  date = new Date();
+date = ""today"";
+ %i1% text = ""Hello World!"";
+var text = ""Hi!"";
+
+console.log(text);
+ %i2% ",19/6/2023 13:17,19/6/2023 13:17
+11,key,JS,ผลลัพธ์จากการ log จะได้เป็นอย่างไร,"const primeNumbers = [2, 3, 5, 7, 11];
+for (let i = 0; i < primeNumbers.length; i++) {
+  const primeNumber = primeNumbers[i];
+  if (primeNumber > 5 || primeNumber < 11) {
+    return console.log(primeNumber);
+  } else {
+    return;
+  }
+}
+ %i% ",19/6/2023 13:17,19/6/2023 13:17
+12,key,JS,div01 และ div02 จะมีค่าข้างในเป็นอะไรบ้าง,"<div id=""name"" class=""div01"">  %i% </div>;
+<div id=""sur_name"" class=""div02"">  %i1% </div>;
+
+const person = {
+  name: ""Thitipong"",
+  sur_name: ""Manajit"",
+  age: 30,
+  city: ""New York"",
+  introduce: function () {
+    document.querySelector(""#name"").innerText = this.name;
+    document.getElementById(""name"").innerText = this.city;
+    document.querySelector(""#sur_name"").innerText = this.age;
+  },
+};
+person.name = ""Pichapetch"";
+person.introduce();
+person.age = 18;
+ %i2% ",19/6/2023 13:17,19/6/2023 13:17
+13,key,JS,จงเติมคำในช่องว่างให้ถูกต้อง,"const favoriteColor = ""red"";
+
+switch ( %i% ) {
+  case ""red"":
+    console.log(""Your favorite color is red!"");
+    break;
+  case ""blue"":
+    console.log(""Your favorite color is blue!"");
+    break;
+  case ""green"":
+    console.log(""Your favorite color is green!"");
+    break;
+   %i1% : console.log(
+    ""Your favorite color is neither red, blue, nor green!""
+  );
+}",19/6/2023 13:17,19/6/2023 13:17
+14,key,JS,จาก Loop ข้างต้นต้องการที่จะแสดงผลเป็นตัวเลขตั้งแต่ 0-9 จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"for (let i = %i% ; i < 10; %i1% ;) {
+  console.log(i);
+}",19/6/2023 13:17,19/6/2023 13:17
+15,key,JS,ต้องการที่จะลบค่าตัวสุดท้ายจาก answers จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"const answers = [""yes"", ""no"", ""error""];
+  answers. %i% ;",19/6/2023 13:17,19/6/2023 13:17
+16,key,JS,ต้องการที่จะลบค่าตัวแรกจาก answers จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"const answers = [""yes"", ""no"", ""error""];
+  answers. %i% ;",19/6/2023 13:17,19/6/2023 13:17
+17,key,JS,ต้องการที่จะเพิ่มค่าต่อจากตัวสุดท้ายโดยให้ค่าเป็น newAnswer เข้าไปใน answers จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"const answers = [""yes"", ""no"", ""error""];
+const newAnswer = ""undefined"";
+answers. %i% ( %i1% );",19/6/2023 13:17,19/6/2023 13:17
+18,key,JS,ต้องการที่จะเปลี่ยนค่า “no” ให้ค่าเป็นตัวแปร newAnswer ใน answers จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"const answers = [""yes"", ""no"", ""error""];
+const newAnswer = ""undefined"";
+answers %i%  =  %i1% ;",19/6/2023 13:17,19/6/2023 13:17
+19,key,JS,ต้องการที่จะเปลี่ยนคำว่า “YesWebDesignStudio” ให้เป็น “YWDS” จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"let text = ""Please visit YesWebDesignStudio!"";
+console.log(text. %i% (""YesWebDesignStudio"", ""YWDS""))
+Output: ""Please visit YWDS!""",19/6/2023 13:17,19/6/2023 13:17
+20,key,JS,ต้องการที่จะให้ค่าตอบกลับออกมาเป็น True จงเติมคำในช่องว่างเพื่อให้การทำงานถูกต้อง,"const text = ""Please visit YesWebDesignStudio!"";
+if (text. %i% (""YesWebDesignStudio"")) {
+  return true;
+} else {
+  return false;
+}",19/6/2023 13:17,19/6/2023 13:17
+21,select,PHP,แนวคิด MVC ย่อมาจากอะไร ?,,19/6/2023 13:17,19/6/2023 13:17
+22,select,PHP,จากแนวคิด MVC การทำงานส่วนใดเป็นการจัดการส่วนของ User Interface,,19/6/2023 13:17,19/6/2023 13:17
+23,select,PHP,จากแนวคิด MVC การทำงานส่วนใดเป็นการจัดการส่วนของ Database,,19/6/2023 13:17,19/6/2023 13:17
+24,select,PHP,ในไฟล์ .env environment variable ตัวใดไม่จำเป็นสำหรับการเชื่อมต่อกับ MySQL,,19/6/2023 13:17,19/6/2023 13:17
+25,select,PHP,ถ้าต้องการทำแบบทดสอบ 4 ตัวเลือก ควรใช้คำสั่ง Form รูปแบบใด,,19/6/2023 13:17,19/6/2023 13:17
+26,select,PHP,ข้อใดต่อไปนี้ไม่ใช่ฟังก์ชันในการทำงานกับอาร์เรย์ใน PHP?,,19/6/2023 13:17,19/6/2023 13:17
+27,key,PHP,"sumArray() เป็นฟังก์ชันที่รับพารามิเตอร์เป็นอาร์เรย์ของตัวเลข ทำหน้าที่คำนวณผลรวมของตัวเลขทั้งหมดในอาร์เรย์และคืนค่าผลรวมของตัวเลขทั้งหมด
+ในส่วนของตัวอย่างการใช้งาน จงเติมคำตอบลงในช่องว่างให้ถูกต้อง","function sumArray($arr) {
+  $sum = 0;
+  foreach($arr as $number) {
+    $sum += $number;
+  }
+  return $sum;
+}
+// เรียกใช้งาน
+$array = [1, 2, 3, 4, 5];
+$totalSum = sumArray($array);
+echo %i% ; ",19/6/2023 13:17,19/6/2023 13:17
+28,key,PHP,"removeDuplicates() เป็นฟังก์ชันที่รับพารามิเตอร์เป็นอาร์เรย์และคืนค่าอาร์เรย์ใหม่ที่มีสมาชิกไม่ซ้ำกัน
+ในส่วนของการทำงานของฟังก์ชัน จงเติมคำตอบลงในช่องว่างให้ถูกต้อง","function removeDuplicates($arr) {
+  $uniqueArr =  %i% ($arr);
+  return array_values($uniqueArr);
+}
+// เรียกใช้งาน
+$array = [1, 2, 3, 4, 2, 3, 5];
+$filteredArray = removeDuplicates($array);
+print_r($filteredArray);",19/6/2023 13:17,19/6/2023 13:17
+29,key,PHP,getFullname() เป็นฟังก์ชันที่ทำหน้าที่รับชื่อและนามสกุลแล้วทำการแปลงให้ชื่อเป็นตัวพิมพ์ใหญ่ทั้งหมด ส่วนนามสกุลเป็นตัวพิมพ์เล็กทั้งหมด,"function getFullname ($myname, $mylastname) {
+    $firstName =  %i% ($myname); 
+    $lastName =   %i1% ($mylastname);
+    $formattedName = $firstName . "" "" . $lastName;
+    return $formattedName;
+}",19/6/2023 13:17,19/6/2023 13:17
+30,key,PHP,จากโจทย์ จงเติม Method ที่ทำหน้าที่เรียงลำดับตัวอักษรภาษาอังกฤษในอาร์เรย์ $colors แบบ Descending,"$colors = array(""red"", ""green"", ""blue"", ""yellow""); 
+ %i% ($colors);",19/6/2023 13:17,19/6/2023 13:17
+31,key,PHP,จาก Switch case ดังต่อไปนี้ จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"<?php
+$favcolor = ""red"";
+
+switch ( %i% ) {
+  case ""red"":
+    echo ""Your favorite color is red!"";
+    break;
+  case ""blue"":
+    echo ""Your favorite color is blue!"";
+    break;
+  case ""green"":
+    echo ""Your favorite color is green!"";
+    break;
+   %i1% :
+    echo ""Your favorite color is neither red, blue, nor green!"";
+}
+?>",19/6/2023 13:17,19/6/2023 13:17
+32,key,PHP,จากโจทย์ ให้เลือกใช้ Loops และเติมคำตอบลงในช่องว่างให้ถูกต้อง,"$colors = array(""red"", ""green"", ""blue"", ""yellow""); 
+
+ %i%  ($colors  %i%  $x) {
+  echo $x;
+}",19/6/2023 13:17,19/6/2023 13:17
+33,key,PHP,จงเลือกใช้ Loops ที่รันเลขตั้งแต่ 0-9 และเติมคำตอบลงในช่องว่างให้ถูกต้อง," %i%   ($i = 0; $i < 10; %i1%  ) {
+  echo $i;
+}",19/6/2023 13:17,19/6/2023 13:17
+34,key,PHP,จงเติมคำตอบลงในช่องว่างเพื่อให้ได้ผลลัพธ์ตามที่โจทย์กำหนด,"$primeNumbers = [2, 3, 5, 7, 11];
+foreach ($primeNumbers as $primeNumber) {
+    if ($primeNumber %i% 5 || $primeNumber < 11) {
+        echo $primeNumber . PHP_EOL;
+    } else {
+        return;
+    }
+}
+
+// OUTPUT : 2 3 5 7",19/6/2023 13:17,19/6/2023 13:17
+35,key,PHP,ถ้า Form ในแถบสีเทามีการกด Submit ไฟล์ welcome.php ควรเติมอะไรลงในช่องว่าง,"<form action=""welcome.php"" method=""post""> First name: <input type=""text"" name=""fname""> </form>
+
+
+<html>
+<body>
+
+Welcome <?php echo %i% ; ?>
+
+</body>
+</html>
+",19/6/2023 13:17,19/6/2023 13:17
+36,key,PHP,จงเติมคำตอบที่สามารถทำให้อาร์เรย์เป็น JSON Object ลงในช่องว่าง,"$age = array(""Peter""=>35, ""Ben""=>37, ""Joe""=>43);
+echo %i% ($age);
+// OUTPUT : {""Peter"":35,""Ben"":37,""Joe"":43}",19/6/2023 13:17,19/6/2023 13:17
+37,key,PHP,ในส่วนของการทำงานของ Method introduce() จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"class Person {
+    public $name;
+    public $age;
+    public $gender;
+  
+    public function introduce() {
+      echo ""Hello, my name is %i% , I am %i1%  years old and
+  I am a  %i2% ."";
+    }
+}",19/6/2023 13:17,19/6/2023 13:17
+38,key,PHP,ในส่วนของการเรียกใช้งานเพื่อแสดงผลลัพธ์ จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"class Rectangle {
+    public $width;
+    public $height;
+  
+    public function getArea() {
+        // โค้ดการทำงานของ Method getArea()
+    }
+}
+// เรียกใช้งาน 
+$rec = new Rectangle();
+$rec->width = 20;
+$rec->height = 3;
+echo %i% ;",19/6/2023 13:17,19/6/2023 13:17
+39,key,PHP,กำหนดให้ Class Employee มีการสืบทอดคุณสมบัติจาก Class Person จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"class Employee %i% Person {
+    public $salary;
+
+    public function getSalary() {
+      // โค้ดการทำงานของ Method getSalary()
+    }
+}",19/6/2023 13:17,19/6/2023 13:17
+40,key,PHP,Class Fruit มีการใช้ Method หนึ่งซึ่งประกาศตัวแปรไว้และทำให้ Method อื่น ๆ สามารถนำตัวแปรใน Method ดังกล่าวที่ได้ประกาศไว้ไปใช้ได้ จงเติมคำตอบลงในช่องว่างให้ถูกต้อง,"class Fruit {
+  public $name;
+  public $color;
+
+  function %i% ($name, $color) {
+    // ตัวแปร $name
+    // ตัวแปร $color
+  }
+  function get_name() {
+    return // ตัวแปร $name
+  }
+  function get_color() {
+    return // ตัวแปร $color
+  }
+}",19/6/2023 13:17,19/6/2023 13:17
