@@ -23,7 +23,7 @@ export default function Componentquiz() {
   // getData
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/questions`)
+      .get(`${process.env.REACT_APP_API}/api/questions`)
       .then((res) => {
         setQuizData(res.data);
       })
@@ -98,7 +98,7 @@ export default function Componentquiz() {
         if (res.isConfirmed) {
           console.log(data);
           axios
-            .post("http://127.0.0.1:8000/api/ans", data)
+            .post(`${process.env.REACT_APP_API}/api/ans`, data)
             .then((res) => {
               Swal.fire({
                 text: `ส่งสำเร็จ`,

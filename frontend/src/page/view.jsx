@@ -10,7 +10,7 @@ function View() {
 
   useEffect(() => {
     axios
-      .get(`http://${process.env.REACT_APP_API}api/ans`)
+      .get(`${process.env.REACT_APP_API}/api/ans`)
       .then((res) => {
         setData(res.data);
       })
